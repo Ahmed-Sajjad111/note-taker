@@ -27,6 +27,18 @@ app.post("/api/notes", (req, res) => {
     res.json(notes)
 });
 
+app.delete("/api/notes:id", (req, res) => {
+    let deletedNote = req.params.id
+
+    let notes = JSON.parse(fs.readFileSync("./db/db.json", "utf-8"))
+
+    let newNotes = notes.filter(note => note.id !== deletedNote)
+
+    fs.writeFileSync("./db/db.json", JSON.stringify(newNotes, null, 2))
+
+    return res.json(newNotes)
+})
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
